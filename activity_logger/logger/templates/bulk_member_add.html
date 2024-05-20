@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 일괄 추가</title>
+</head>
+<body>
+    <h1>회원 일괄 추가</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">추가</button>
+    </form>
+    <a href="{% url 'member_list' %}">회원 명단</a>
+</body>
+</html>

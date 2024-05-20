@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>활동 기록기</title>
+</head>
+<body>
+    <h1>활동 기록기</h1>
+    <form action="/upload/" method="post">
+        {% csrf_token %}
+        <label for="date">날짜 (예: 3.28):</label><br>
+        <input type="text" id="date" name="date" placeholder="3.28"><br><br>
+        
+        <label for="activity_name">활동 이름 (예: 시작세미나):</label><br>
+        <input type="text" id="activity_name" name="activity_name" placeholder="시작세미나"><br><br>
+        
+        <label for="participants">참가자 (예: 우현우, 박보라, 박성환):</label><br>
+        <input type="text" id="participants" name="participants" placeholder="우현우, 박보라, 박성환"><br><br>
+        
+        <label for="duration">활동 시간 (예: 90분):</label><br>
+        <input type="text" id="duration" name="duration" placeholder="90분"><br><br>
+        
+        <input type="submit" value="제출">
+    </form>
+
+    <h2>현재 데이터 현황</h2>
+    {% if activity_log %}
+        <table border="1">
+            <tr>
+                <th>날짜</th>
+                <th>활동 이름</th>
+                <th>참가자</th>
+                <th>활동 시간 (분)</th>
+            </tr>
+            {% for entry in activity_log %}
+            <tr>
+                <td>{{ entry.Date }}</td>
+                <td>{{ entry.Activity_Name }}</td>
+                <td>{{ entry.Participant }}</td>
+                <td>{{ entry.Duration }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <form action="/download/" method="post">
+            {% csrf_token %}
+            <input type="submit" value="엑셀 파일 다운로드">
+        </form>
+    {% else %}
+        <p>저장된 데이터가 없습니다.</p>
+    {% endif %}
+</body>
+</html>

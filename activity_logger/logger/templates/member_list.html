@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 명단</title>
+</head>
+<body>
+    <h1>회원 명단</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">추가</button>
+    </form>
+    <h2>현재 회원 명단</h2>
+    <ul>
+        {% for member in members %}
+        <li>
+            {{ member.name }}
+            <form action="{% url 'delete_member' member.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">삭제</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'bulk_member_add' %}">회원 일괄 추가</a>
+    <a href="{% url 'activity_log' %}">활동 로그</a>
+</body>
+</html>

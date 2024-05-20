@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>활동 로그</title>
+    <script>
+        function toggleCheckboxes(source) {
+            checkboxes = document.getElementsByName('participants');
+            for(var i=0, n=checkboxes.length;i<n;i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>활동 로그</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="date">날짜:</label>
+        {{ form.date }}<br>
+        
+        <label for="activity_name">활동명:</label>
+        {{ form.activity_name }}<br>
+        
+        <label for="participants">참가자:</label><br>
+        <input type="checkbox" onclick="toggleCheckboxes(this)"> 전체 선택/해제<br>
+        {{ form.participants }}<br>
+        
+        <label for="duration">활동 시간:</label>
+        {{ form.duration }}<br>
+        
+        <button type="submit">추가</button>
+    </form>
+    <h2>현재 활동 로그</h2>
+    {% load custom_filters %}
+    <table border="1">
+        <tr>
+            <th>이름</th>
+            {% for activity, activity_id in activity_columns %}
+            <th>{{ activity }} <a href="?delete_activity={{ activity_id }}">삭제</a></th>
+            {% endfor %}
+            <th>총 활동 시간</th>
+        </tr>
+        {% for member, data in summary_data.items %}
+        <tr>
+            <td>{{ member }}</td>
+            {% for activity, _ in activity_columns %}
+            <td>{{ data.activities|get_item:activity }}</td>
+            {% endfor %}
+            <td>{{ data.total_duration }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <form action="{% url 'download' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">엑셀 파일 다운로드</button>
+    </form>
+    <a href="{% url 'member_list' %}">회원 명단</a>
+</body>
+</html>
