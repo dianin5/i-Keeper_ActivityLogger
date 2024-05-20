@@ -6,7 +6,7 @@
 css는 죽었따.
 
 ## 회원 추가한 화면
-![alt text](image-1.png)
+![alt text](image-4.png)
 
 ## 활동 로그 찍는 곳 화면
 ![alt text](image-3.png)
