@@ -9,7 +9,7 @@ css는 죽었따.
 ![alt text](image.png)
 
 ## 활동 로그 찍는 곳 화면
-![alt text](image-1.png)
+![alt text](image-3.png)
 
 ## 현재 활동 로그에서 삭제 및 다운로드
 ![alt text](image-2.png)
