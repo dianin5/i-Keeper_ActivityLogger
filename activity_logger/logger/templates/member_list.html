@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>회원 목록</title>
+    <style>
+        #edit-form {
+            display: none;
+            border: 1px solid #000;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>회원 목록</h1>
@@ -15,7 +23,7 @@
         {% for member in members %}
         <tr>
             <td>{{ member.name }}</td>
-            <td><a href="{% url 'edit_member' member.id %}">수정</a></td>
+            <td><button type="button" onclick="showEditForm({{ member.id }}, '{{ member.name }}')">수정</button></td>
             <td><a href="{% url 'delete_member' member.id %}">삭제</a></td>
         </tr>
         {% endfor %}
@@ -35,5 +43,31 @@
     
     <h2>기타 기능</h2>
     <a href="{% url 'activity_log' %}"><button>활동 기록 보기</button></a>
+
+    <!-- 멤버 수정 폼 -->
+    <div id="edit-form">
+        <h2>회원 수정</h2>
+        <form id="edit-member-form" action="" method="post">
+            {% csrf_token %}
+            <label for="edit-member-name">이름:</label>
+            <input type="text" id="edit-member-name" name="name">
+            <button type="submit">저장</button>
+            <button type="button" onclick="hideEditForm()">취소</button>
+        </form>
+    </div>
+
+    <script>
+        function showEditForm(memberId, memberName) {
+            console.log("수정 폼을 보여줍니다. 멤버 ID: " + memberId + ", 멤버 이름: " + memberName);  // 디버깅 메시지
+            document.getElementById('edit-form').style.display = 'block';
+            document.getElementById('edit-member-name').value = memberName;
+            document.getElementById('edit-member-form').action = '/members/edit/' + memberId + '/';
+        }
+
+        function hideEditForm() {
+            console.log("수정 폼을 숨깁니다.");  // 디버깅 메시지
+            document.getElementById('edit-form').style.display = 'none';
+        }
+    </script>
 </body>
 </html>

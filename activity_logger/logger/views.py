@@ -8,7 +8,7 @@ from datetime import datetime
 
 def member_list(request):
     members = Member.objects.all().order_by('name')
-    if request.method == 'POST':
+    if request.method == 'POST' and 'name' in request.POST:
         form = MemberForm(request.POST)
         if form.is_valid():
             form.save()
@@ -16,11 +16,6 @@ def member_list(request):
     else:
         form = MemberForm()
     return render(request, 'member_list.html', {'members': members, 'form': form})
-
-def delete_member(request, member_id):
-    member = get_object_or_404(Member, id=member_id)
-    member.delete()
-    return redirect('member_list')
 
 def edit_member(request, member_id):
     member = get_object_or_404(Member, id=member_id)
@@ -31,7 +26,12 @@ def edit_member(request, member_id):
             return redirect('member_list')
     else:
         form = MemberForm(instance=member)
-    return render(request, 'edit_member.html', {'form': form, 'member': member})
+    return redirect('member_list')
+
+def delete_member(request, member_id):
+    member = get_object_or_404(Member, id=member_id)
+    member.delete()
+    return redirect('member_list')
 
 def bulk_member_add(request):
     if request.method == 'POST':
