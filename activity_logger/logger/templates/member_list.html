@@ -2,28 +2,38 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>회원 명단</title>
+    <title>회원 목록</title>
 </head>
 <body>
-    <h1>회원 명단</h1>
-    <form method="post">
+    <h1>회원 목록</h1>
+    <table>
+        <tr>
+            <th>이름</th>
+            <th>수정</th>
+            <th>삭제</th>
+        </tr>
+        {% for member in members %}
+        <tr>
+            <td>{{ member.name }}</td>
+            <td><a href="{% url 'edit_member' member.id %}">수정</a></td>
+            <td><a href="{% url 'delete_member' member.id %}">삭제</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h2>회원 추가</h2>
+    <form action="{% url 'member_list' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">추가</button>
     </form>
-    <h2>현재 회원 명단</h2>
-    <ul>
-        {% for member in members %}
-        <li>
-            {{ member.name }}
-            <form action="{% url 'delete_member' member.id %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit">삭제</button>
-            </form>
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'bulk_member_add' %}">회원 일괄 추가</a>
-    <a href="{% url 'activity_log' %}">활동 로그</a>
+    <h2>일괄 회원 추가</h2>
+    <form action="{% url 'bulk_member_add' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">추가</button>
+    </form>
+    
+    <h2>기타 기능</h2>
+    <a href="{% url 'activity_log' %}"><button>활동 기록 보기</button></a>
 </body>
 </html>

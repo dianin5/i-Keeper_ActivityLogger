@@ -22,6 +22,17 @@ def delete_member(request, member_id):
     member.delete()
     return redirect('member_list')
 
+def edit_member(request, member_id):
+    member = get_object_or_404(Member, id=member_id)
+    if request.method == 'POST':
+        form = MemberForm(request.POST, instance=member)
+        if form.is_valid():
+            form.save()
+            return redirect('member_list')
+    else:
+        form = MemberForm(instance=member)
+    return render(request, 'edit_member.html', {'form': form, 'member': member})
+
 def bulk_member_add(request):
     if request.method == 'POST':
         form = BulkMemberForm(request.POST)
