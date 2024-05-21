@@ -4,6 +4,7 @@ from .forms import MemberForm, ActivityLogForm, BulkMemberForm
 from django.http import HttpResponse
 import pandas as pd
 from io import BytesIO
+from datetime import datetime
 
 def member_list(request):
     members = Member.objects.all().order_by('name')
@@ -76,6 +77,7 @@ def activity_log(request):
     
     # 참가자별 활동 여부와 총 활동 시간 계산
     activity_columns = logs.values_list('activity__activity_name', 'activity__date', 'activity__id').distinct()
+    activity_columns = sorted(activity_columns, key=lambda x: datetime.strptime(x[1], '%m.%d'))  # 날짜순으로 정렬
     summary_data = {}
     for member in members:
         summary_data[member.name] = {
@@ -108,6 +110,7 @@ def download(request):
     members = Member.objects.all().order_by('name')
     
     activity_columns = logs.values_list('activity__activity_name', 'activity__date').distinct()
+    activity_columns = sorted(activity_columns, key=lambda x: datetime.strptime(x[1], '%m.%d'))  # 날짜순으로 정렬
     summary_data = []
     
     for member in members:
